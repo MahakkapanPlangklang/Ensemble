@@ -4,7 +4,6 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
-import functions_framework  # ใช้สำหรับ Firebase Functions
 
 # 🔥 ตั้งค่า Firebase
 cred = credentials.Certificate("firebase_config.json")  # ใส่ไฟล์ Service Account JSON
