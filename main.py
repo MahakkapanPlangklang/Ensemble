@@ -3,14 +3,12 @@ import numpy as np
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-# โหลดโมเดล Ensemble
 final_model = joblib.load("best_model.pkl")
 model = final_model["model"]
 label_encoders = final_model["label_encoders"]
 
 feature_names = ["bill_length_mm", "bill_depth_mm", "flipper_length_mm", "body_mass_g", "sex"]
 
-# สร้าง Flask App
 app = Flask(__name__)
 CORS(app)
 
