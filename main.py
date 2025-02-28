@@ -26,6 +26,7 @@ def predict():
 
         # ✅ ตรวจสอบว่า `sex` ที่ส่งมาตรงกับ LabelEncoder หรือไม่
         if data["sex"] not in label_encoders["sex"].classes_:
+            print(f"❌ Invalid sex value received: {data['sex']}")
             return jsonify({
                 "error": f"Invalid sex value: {data['sex']}, must be one of {label_encoders['sex'].classes_}"
             }), 400
