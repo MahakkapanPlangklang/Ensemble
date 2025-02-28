@@ -3,7 +3,7 @@ import numpy as np
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-# โหลดโมเดล
+# 📌 โหลดโมเดลที่ฝึกไว้
 final_model = joblib.load("best_model.pkl")
 model = final_model["model"]
 label_encoders = final_model["label_encoders"]
@@ -19,23 +19,17 @@ def home():
 def predict():
     try:
         data = request.get_json()
-        print(f"🔹 Received Data: {data}")  # ✅ ดูค่าที่ส่งมา API
+        print(f"🔹 Received Data: {data}")
 
-        # ✅ ตรวจสอบว่ามีค่าครบทุกช่อง
-        required_fields = ["bill_length_mm", "bill_depth_mm", "flipper_length_mm", "body_mass_g", "sex"]
-        for field in required_fields:
-            if field not in data or data[field] == "":
-                error_msg = f"Missing value for {field}"
-                print(f"❌ {error_msg}")
-                return jsonify({"error": error_msg}), 400
+        # ✅ ตรวจสอบค่าที่ LabelEncoder ใช้
+        print(f"🔍 LabelEncoder for sex: {label_encoders['sex'].classes_}")
 
-        # ✅ ตรวจสอบค่าของ `sex`
-        if data["sex"] not in ["Male", "Female"]:
-            error_msg = "Invalid sex value, must be 'Male' or 'Female'"
-            print(f"❌ {error_msg}")
-            return jsonify({"error": error_msg}), 400
+        # ✅ ตรวจสอบว่า `sex` ที่ส่งมาตรงกับ LabelEncoder หรือไม่
+        if data["sex"] not in label_encoders["sex"].classes_:
+            return jsonify({
+                "error": f"Invalid sex value: {data['sex']}, must be one of {label_encoders['sex'].classes_}"
+            }), 400
 
-        # ✅ แปลงค่า `sex`
         encoded_sex = label_encoders["sex"].transform([data["sex"]])[0]
         print(f"✅ Encoded sex: {encoded_sex}")
 
