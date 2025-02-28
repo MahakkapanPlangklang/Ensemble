@@ -4,3 +4,4 @@ numpy
 joblib
 flask-cors
 scikit-learn
+firebase-admin
